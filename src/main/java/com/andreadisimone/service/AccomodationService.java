@@ -1,5 +1,6 @@
 package com.andreadisimone.service;
 import java.time.LocalDate;
+import java.util.List;
 
 import com.andreadisimone.model.Accomodation;
 import com.andreadisimone.model.Host;
@@ -29,5 +30,10 @@ public class AccomodationService {
         return accomodationDao.create(accomodation2save);
     }
 
+    public List<Accomodation> getAllAccomodation(){
+        log.info("Trying to get all Accomodations");
+
+        return accomodationDao.findAll();
+    };
 
 }

@@ -1,31 +1,3 @@
-CREATE TABLE IF NOT EXISTS accomodation(
-	id_accomodation SERIAL NOT NULL UNIQUE,
-    accomodation_name VARCHAR(20) NOT NULL,
-    n_rooms INTEGER NOT NULL,
-    accomodation_address VARCHAR(100) NOT NULL,
-    id_host INTEGER NOT NULL,
-    n_bed_places INTEGER NOT NULL,
-    floor INTEGER NOT NULL,
-    starter_date DATE NOT NULL,
-    end_date DATE NOT NULL,
-    price INTEGER NOT NULL,
-    PRIMARY KEY (id_accomodation),
-	FOREIGN KEY id_host REFERENCES host(id_host),
- 
-	CONSTRAINT check_price CHECK ((price) >= 10 AND (price) <= 50000) 
-); 
-
-CREATE TABLE IF NOT EXISTS feedback(
-	id_feed SERIAL NOT NULL UNIQUE,
-	title VARCHAR(100) ,
-	text_feedback TEXT ,
-	points INTEGER NOT NULL,
-	id_reservation INTEGER NOT NULL,
-	PRIMARY KEY (id_feed),
-	FOREIGN KEY (id_reservation) REFERENCES reservation(id_reservation),
-	
-	CONSTRAINT check_points CHECK (points >= 1 AND points <= 5)
-);
 
 CREATE TABLE IF NOT EXISTS host(
 	id_host SERIAL NOT NULL UNIQUE,
@@ -36,7 +8,7 @@ CREATE TABLE IF NOT EXISTS host(
 	host_address VARCHAR(50) NOT NULL,
 	PRIMARY KEY (id_host),
 
-	CONSTRAINT check_email_format CHECK ( email LIKE '%@%.%' ),
+	CONSTRAINT check_email_format CHECK ( email LIKE '%@%.%' )
 );
 
 CREATE TABLE IF NOT EXISTS tenant(
@@ -47,8 +19,25 @@ CREATE TABLE IF NOT EXISTS tenant(
 	tenant_address VARCHAR(50) NOT NULL,
 	PRIMARY KEY (id_tenant),
 
-	CONSTRAINT check_email_format CHECK ( email LIKE '%@%.%' ),
+	CONSTRAINT check_email_format CHECK ( email LIKE '%@%.%' )
 );
+
+CREATE TABLE IF NOT EXISTS accomodation(
+	id_accomodation SERIAL NOT NULL UNIQUE,
+    accomodation_name VARCHAR(20) NOT NULL,
+    n_rooms INTEGER NOT NULL,
+    accomodation_address VARCHAR(100) NOT NULL,
+    id_host INTEGER NOT NULL,
+    n_bed_places INTEGER NOT NULL,
+    floor INTEGER NOT NULL,
+    starter_date TIMESTAMP WITH TIME ZONE NOT NULL,
+    end_date TIMESTAMP WITH TIME ZONE NOT NULL,
+    price INTEGER NOT NULL,
+    PRIMARY KEY (id_accomodation),
+	FOREIGN KEY (id_host) REFERENCES host(id_host),
+ 
+	CONSTRAINT check_price CHECK ((price) >= 10 AND (price) <= 50000) 
+); 
 
 CREATE TABLE IF NOT EXISTS reservation(
 	id_reservation SERIAL NOT NULL UNIQUE,
@@ -62,6 +51,20 @@ CREATE TABLE IF NOT EXISTS reservation(
 	
 	CONSTRAINT check_dates CHECK (reservation_end_date > reservation_start_date)
 );
+
+CREATE TABLE IF NOT EXISTS feedback(
+	id_feed SERIAL NOT NULL UNIQUE,
+	title VARCHAR(100) ,
+	text_feedback TEXT ,
+	points INTEGER NOT NULL,
+	id_reservation INTEGER NOT NULL,
+	PRIMARY KEY (id_feed),
+	FOREIGN KEY (id_reservation) REFERENCES reservation(id_reservation),
+	
+	CONSTRAINT check_points CHECK (points >= 1 AND points <= 5)
+);
+
+
 
 CREATE INDEX IF NOT EXISTS idx_accomodation_id_host ON accomodation(id_host); 
 CREATE INDEX IF NOT EXISTS idx_feedback_id_reservation ON feedback(id_reservation);

@@ -1,5 +1,6 @@
 package com.andreadisimone;
 
+import com.andreadisimone.controller.AccomodationController;
 import com.andreadisimone.util.DatabaseConnection;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -28,8 +29,16 @@ public class App
             config.http.defaultContentType = "application/json";
         });
 
-        UserDemoJDBCController userDemoJDBCController = new UserDemoJDBCController();
-        userDemoJDBCController.registerRoutes(app);
+        app.before(ctx -> {
+            ctx.header("Access-Control-Allow-Origin", "*"); // permette tutte le origini
+            ctx.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
+            ctx.header("Access-Control-Allow-Headers", "Content-Type,Authorization");
+        });
+
+        app.options("/*", ctx -> ctx.status(204));
+
+        AccomodationController accomodationController = new AccomodationController();
+        accomodationController.registerRoutes(app);
 
         app.start(8080); //app è metodo di Javalin
 

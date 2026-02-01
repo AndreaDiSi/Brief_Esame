@@ -12,4 +12,6 @@ import lombok.NoArgsConstructor;
 public class Host extends User{
     private Integer idHost;
     private boolean isSuperHost;
+
 }
+

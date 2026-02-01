@@ -1,9 +1,11 @@
 package com.andreadisimone.controller;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.andreadisimone.model.Accomodation;
 import com.andreadisimone.service.AccomodationService;
+
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
@@ -18,10 +20,12 @@ public class AccomodationController {
     }
     public void registerRoutes(Javalin app){
         app.post("/api/v1/accomodations", this::createAccomodation);
+        app.get("/api/v1/accomodations", this::getAllAccomodations);
     }
 
+    //====================CREATE==========================//
     public void createAccomodation(Context ctx){
-        log.info("POST /api/v1/accomodations - Request to create accomodation");
+        log.info("POST /api/v1/accomodations - Request to create an accomodation");
 
         // legge l'http request(JSON) e lo converte in un Accomodation java
         Accomodation accomodation = ctx.bodyAsClass(Accomodation.class);
@@ -47,6 +51,17 @@ public class AccomodationController {
             ctx.json(buildErrorResponse(ex.getMessage()));
         }
     }
+
+
+    //====================READ==========================//
+
+    public void getAllAccomodations(Context ctx){
+        log.info("GET /api/v1/accomodations - Request to show all accomodations");
+        List<Accomodation> accomodationList = accomodationService.getAllAccomodation();
+        ctx.status(HttpStatus.OK);
+        ctx.json(accomodationList);
+    }
+
 
     // UTILITY
 

@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS tenant(
 );
 
 CREATE TABLE IF NOT EXISTS accomodation(
-	id_accomodation SERIAL NOT NULL UNIQUE,
+    id_accomodation SERIAL PRIMARY KEY,
     accomodation_name VARCHAR(20) NOT NULL,
     n_rooms INTEGER NOT NULL,
     accomodation_address VARCHAR(100) NOT NULL,
@@ -33,35 +33,44 @@ CREATE TABLE IF NOT EXISTS accomodation(
     starter_date TIMESTAMP WITH TIME ZONE NOT NULL,
     end_date TIMESTAMP WITH TIME ZONE NOT NULL,
     price INTEGER NOT NULL,
-    PRIMARY KEY (id_accomodation),
-	FOREIGN KEY (id_host) REFERENCES host(id_host),
- 
-	CONSTRAINT check_price CHECK ((price) >= 10 AND (price) <= 50000) 
-); 
+
+    FOREIGN KEY (id_host)
+        REFERENCES host(id_host)
+        ON DELETE CASCADE,
+
+    CONSTRAINT check_price CHECK (price >= 10 AND price <= 50000)
+);
 
 CREATE TABLE IF NOT EXISTS reservation(
-	id_reservation SERIAL NOT NULL UNIQUE,
-	reservation_start_date DATE NOT NULL,
-	reservation_end_date DATE NOT NULL,
-	id_tenant INTEGER NOT NULL,
-	id_accomodation INTEGER NOT NULL,
-	PRIMARY KEY (id_reservation),
-	FOREIGN KEY (id_tenant) REFERENCES tenant(id_tenant),
-	FOREIGN KEY (id_accomodation) REFERENCES accomodation(id_accomodation),
-	
-	CONSTRAINT check_dates CHECK (reservation_end_date > reservation_start_date)
+    id_reservation SERIAL PRIMARY KEY,
+    reservation_start_date DATE NOT NULL,
+    reservation_end_date DATE NOT NULL,
+    id_tenant INTEGER NOT NULL,
+    id_accomodation INTEGER NOT NULL,
+
+    FOREIGN KEY (id_tenant)
+        REFERENCES tenant(id_tenant)
+        ON DELETE CASCADE,
+
+    FOREIGN KEY (id_accomodation)
+        REFERENCES accomodation(id_accomodation)
+        ON DELETE CASCADE,
+
+    CONSTRAINT check_dates CHECK (reservation_end_date > reservation_start_date)
 );
 
 CREATE TABLE IF NOT EXISTS feedback(
-	id_feed SERIAL NOT NULL UNIQUE,
-	title VARCHAR(100) ,
-	text_feedback TEXT ,
-	points INTEGER NOT NULL,
-	id_reservation INTEGER NOT NULL,
-	PRIMARY KEY (id_feed),
-	FOREIGN KEY (id_reservation) REFERENCES reservation(id_reservation),
-	
-	CONSTRAINT check_points CHECK (points >= 1 AND points <= 5)
+    id_feed SERIAL PRIMARY KEY,
+    title VARCHAR(100),
+    text_feedback TEXT,
+    points INTEGER NOT NULL,
+    id_reservation INTEGER NOT NULL,
+
+    FOREIGN KEY (id_reservation)
+        REFERENCES reservation(id_reservation)
+        ON DELETE CASCADE,
+
+    CONSTRAINT check_points CHECK (points >= 1 AND points <= 5)
 );
 
 

@@ -3,6 +3,8 @@ package com.andreadisimone.repository.accomodation_daos;
 import java.util.List;
 import java.util.Optional;
 
+import com.andreadisimone.dtos.accomodation_dtos.AccomodationRequestDTO;
+import com.andreadisimone.dtos.accomodation_dtos.AccomodationResponseDTO;
 import com.andreadisimone.model.Accomodation;
 import com.andreadisimone.model.Host;
 
@@ -11,7 +13,7 @@ public interface AccomodationDAO {
 
     // ==================== CREATE ====================
 
-    Accomodation create(Accomodation accomodation);
+    AccomodationResponseDTO create(AccomodationRequestDTO accomodation);
 
     // ==================== READ ====================
     List<Accomodation> findAll();
@@ -22,11 +24,12 @@ public interface AccomodationDAO {
 
     // ==================== UPDATE ====================
 
-    Optional<Accomodation> update(Accomodation accomodation);
+    AccomodationResponseDTO update(AccomodationResponseDTO accomodation, Integer idAccomodation);
 
     // ==================== DELETE ====================
 
     int deleteAllHostAccomodations(Host idHost);
+    
     boolean deleteById(Integer idAccomodation);
 
     

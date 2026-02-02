@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 
 public class Accomodation {
     private Integer idAccomodation;
-    private String name;
+    private String accomodationName;
     private Integer nRooms;
     private String accomodationAddress;
     private Host Host;
@@ -20,20 +20,21 @@ public class Accomodation {
     private LocalDate startDate;
     private LocalDate endDate;
     private Integer price;
+    private int hostId;
 
-    public Accomodation(String name, Integer nRooms,String accomodationAddress, Host Host, Integer nBedPlaces, Integer floor, LocalDate startDate, LocalDate endDate, Integer price) {
+    public Accomodation(String accomodationName, Integer nRooms,String accomodationAddress, Host Host, Integer nBedPlaces, Integer floor, LocalDate startDate, LocalDate endDate, Integer price, int hostId){ {
         this.Host = Host;
         this.accomodationAddress = accomodationAddress;
         this.endDate = endDate;
         this.floor = floor;
         this.nBedPlaces = nBedPlaces;
         this.nRooms = nRooms;
-        this.name = name;
+        this.accomodationName = accomodationName;
         this.price = price;
         this.startDate = startDate;
+        this.hostId = hostId;
     }
-
-
+    }
 }
 
 

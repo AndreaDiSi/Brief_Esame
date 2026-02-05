@@ -52,7 +52,7 @@ public class HostDAOImpl implements HostDAO {
 
     @Override
     public List<HostResponseDTO> findAll() {
-        String sql = "SELECT * FROM host";
+        String sql = "SELECT * FROM host ORDER BY id_host desc";
         List<HostResponseDTO> hosts = new ArrayList<>();
 
         try (Connection connection = DatabaseConnection.getConnection(); PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {

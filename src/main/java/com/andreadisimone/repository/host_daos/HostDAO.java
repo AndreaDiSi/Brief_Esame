@@ -21,7 +21,7 @@ public interface HostDAO {
 
     HostResponseDTO getBestHost();
 
-    List<HostResponseDTO> getTopFiveBestHost();
+    
 
     List<HostResponseDTO> getAllSuperHosts();
     // ==================== UPDATE ====================

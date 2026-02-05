@@ -56,9 +56,10 @@ public class ReservationService {
     public ReservationResponseDTO update(Integer idReservation, ReservationRequestDTO request) {
         log.info("Attempting to update reservation with ID: {}", idReservation);
 
-        // Validazione date anche in fase di update
-        if (request.getReservationEndDate().isBefore(request.getReservationStartDate())) {
+        if (request.getReservationEndDate().isBefore(request.getReservationStartDate()) == true) {  
+            log.error("Reservation end date must be after start date");
             throw new IllegalArgumentException("Reservation end date must be after start date");
+            
         }
 
         try {

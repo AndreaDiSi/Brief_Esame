@@ -140,55 +140,6 @@ public class HostDAOImpl implements HostDAO {
         throw new HostNotFoundException("No hosts with feedback found");
     }
 
-
-    @Override
-    public List<HostResponseDTO> getTopFiveBestHost() {
-
-        String sql = """
-        SELECT 
-            h.*,
-            ROUND(AVG(f.points), 2) AS avg_feedback,
-            COUNT(f.id_feed) AS n_feedback
-        FROM host h
-        JOIN accomodation a ON h.id_host = a.id_host
-        JOIN reservation r ON a.id_accomodation = r.id_accomodation
-        JOIN feedback f ON r.id_reservation = f.id_reservation
-        GROUP BY h.id_host
-        HAVING COUNT(f.id_feed) > 0
-        ORDER BY avg_feedback DESC
-        LIMIT 5
-        """;
-        List<HostResponseDTO> hosts = new ArrayList<>();
-        try (Connection connection = DatabaseConnection.getConnection(); PreparedStatement ps = connection.prepareStatement(sql)) {
-
-            try (ResultSet rs = ps.executeQuery()) {
-
-                while (rs.next()) {
-
-                    HostResponseDTO host = new HostResponseDTO();
-
-                    host.setIdHost(rs.getInt("id_host"));
-                    host.setHostName(rs.getString("host_name"));
-                    host.setSurname(rs.getString("surname"));
-                    host.setEmail(rs.getString("email"));
-                    host.setHostAddress(rs.getString("host_address"));
-                    host.setSuperhost(rs.getBoolean("is_superhost"));
-                    host.setAvgFeedback(rs.getDouble("avg_feedback"));
-                    host.setNFeedback(rs.getInt("n_feedback"));
-
-                    hosts.add(host);
-                }
-            }
-
-        } catch (SQLException ex) {
-            log.error("Error finding best host: {}", ex.getMessage(), ex);
-            throw new RuntimeException("SQLException: ", ex);
-        }
-
-        log.info("Found Top Five hosts", hosts.size());
-        return hosts;
-    }
-
     @Override
     public List<HostResponseDTO> getAllSuperHosts() {
         String sql = """

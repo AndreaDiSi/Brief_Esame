@@ -30,7 +30,7 @@ public class TenantService {
             return tenantDAO.create(tenantRequest);
         } catch (Exception e) {
             log.error("Error creating tenant: {}", tenantRequest.getTenantName());
-        
+
             throw new RuntimeException("Could not create tenant: " + e.getMessage());
         }
     }
@@ -48,11 +48,21 @@ public class TenantService {
     public TenantResponseDTO update(Integer idTenant, TenantRequestDTO tenantRequest) {
         log.info("Trying to update tenant with id: {}", idTenant);
 
-        
         try {
             return tenantDAO.update(idTenant, tenantRequest);
         } catch (TenantNotFoundException e) {
             log.error("Tenant with id {} not found for update", idTenant);
+            throw e;
+        }
+    }
+
+    public List<TenantResponseDTO> getTopFiveTenants() {
+        log.info("Trying to get the top five best tenants");
+
+        try {
+            return tenantDAO.getTopFiveTenants();
+        } catch (TenantNotFoundException e) {
+            log.error("top 5 Tenant not found ");
             throw e;
         }
     }

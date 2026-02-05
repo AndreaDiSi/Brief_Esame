@@ -3,6 +3,7 @@ package com.andreadisimone.repository.tenant_daos;
 import java.util.List;
 import java.util.Optional;
 
+import com.andreadisimone.dtos.host_dtos.HostResponseDTO;
 import com.andreadisimone.dtos.reservation_dtos.ReservationResponseDTO;
 import com.andreadisimone.dtos.tenant_dtos.TenantRequestDTO;
 import com.andreadisimone.dtos.tenant_dtos.TenantResponseDTO;
@@ -18,6 +19,8 @@ public interface TenantDAO {
     Optional<TenantResponseDTO> findById(Integer idTenant);
     
     Optional<ReservationResponseDTO> getLastReservation(Integer idTenant);
+
+    List<TenantResponseDTO> getTopFiveTenants();
     // ==================== UPDATE ====================
     TenantResponseDTO update(Integer id, TenantRequestDTO request);
 

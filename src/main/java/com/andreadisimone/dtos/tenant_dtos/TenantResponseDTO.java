@@ -13,4 +13,16 @@ public class TenantResponseDTO {
     private String surname;
     private String email;
     private String tenantAddress;
+    private Integer nReservations;
+
+    public TenantResponseDTO(Integer idTenant,String tenantName, String surname,String email,   String tenantAddress ) {
+        this.email = email;
+        this.idTenant = idTenant;
+        this.surname = surname;
+        this.tenantAddress = tenantAddress;
+        this.tenantName = tenantName;
+    }
+
 }
+
+

@@ -25,8 +25,16 @@ public class AccomodationDAOImpl implements AccomodationDAO {
 
     @Override
     public AccomodationResponseDTO create(AccomodationRequestDTO accomodation) {
-        String sql = "INSERT INTO accomodation(accomodation_name, n_rooms, accomodation_address, id_host, n_bed_places, floor, starter_date, end_date, price) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING *";
-        AccomodationResponseDTO newAccomodationResponseDTO = new AccomodationResponseDTO();
+
+        String sql = """
+        INSERT INTO accomodation
+        (accomodation_name, n_rooms, accomodation_address, id_host,
+         n_bed_places, floor, starter_date, end_date, price)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        RETURNING id_accomodation, accomodation_name, n_rooms,
+                  accomodation_address, id_host, n_bed_places,
+                  floor, starter_date, end_date, price
+    """;
 
         try (Connection connection = DatabaseConnection.getConnection(); PreparedStatement ps = connection.prepareStatement(sql)) {
 
@@ -43,29 +51,24 @@ public class AccomodationDAOImpl implements AccomodationDAO {
             try (ResultSet rs = ps.executeQuery()) {
 
                 if (rs.next()) {
-
-                    return mapResultSetToAccomodtion(rs);
-                } else {
-                    throw new SQLException("Creating accomodation failed, no ID obtained.");
+                    AccomodationResponseDTO created = mapResultSetToAccomodation(rs);
+                    log.info("Accomodation created successfully - ID: {}", created.getIdAccomodation());
+                    
+                    return created;
                 }
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-                log.error("Accomodation creation execute query gone wrong");
+
+                throw new SQLException("Creating accomodation failed, no ID obtained.");
             }
 
-        } catch (SQLException exception) {
-            log.error("Error during the creation of the accomodation: {}", newAccomodationResponseDTO.getAccomodationName(), exception);
-            throw new RuntimeException("SQLException: ", exception);
+        } catch (SQLException ex) {
+            log.error("Error during creation", ex);
+            throw new RuntimeException("SQLException:", ex);
         }
-
-        log.info("Accomodation created successfully - ID: {}, ", newAccomodationResponseDTO.getIdAccomodation());
-
-        return newAccomodationResponseDTO;
     }
 
     @Override
     public List<AccomodationResponseDTO> getAll() {
-        String sql = "SELECT * FROM accomodation";
+        String sql = "SELECT * FROM accomodation ORDER BY id_accomodation desc";
         List<AccomodationResponseDTO> accomodationsList = new ArrayList<>();
 
         try (Connection connection = DatabaseConnection.getConnection(); PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -73,7 +76,7 @@ public class AccomodationDAOImpl implements AccomodationDAO {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
 
-                    accomodationsList.add(mapResultSetToAccomodtion(rs));
+                    accomodationsList.add(mapResultSetToAccomodation(rs));
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -96,7 +99,7 @@ public class AccomodationDAOImpl implements AccomodationDAO {
             try (ResultSet rs = ps.executeQuery()) {
                 ps.setInt(1, idHost.getIdHost());
                 while (rs.next()) {
-                    accomodationsList.add(mapResultSetToAccomodtion(rs));
+                    accomodationsList.add(mapResultSetToAccomodation(rs));
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -117,7 +120,7 @@ public class AccomodationDAOImpl implements AccomodationDAO {
             ps.setInt(1, idAccomodation);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    return Optional.of(mapResultSetToAccomodtion(rs));
+                    return Optional.of(mapResultSetToAccomodation(rs));
                 }
             }
         } catch (SQLException ex) {
@@ -151,7 +154,7 @@ public class AccomodationDAOImpl implements AccomodationDAO {
                     accomodation.setAccomodationAddress(rs.getString("accomodation_address"));
                     HostDAOImpl hostDAO = new HostDAOImpl();
                     //lambda expression, funzione senza parametri che torna un oggetto
-                    accomodation.setHost(hostDAO.findById(rs.getInt("id_host")).orElseThrow(() -> new HostNotFoundException("Host not found")));
+                    accomodation.setHostId(rs.getInt("id_host"));
                     accomodation.setNBedPlaces(rs.getInt("n_bed_places"));
                     accomodation.setFloor(rs.getInt("floor"));
                     accomodation.setStartDate(DateConverter.date2LocalDate(rs.getDate("starter_date")));
@@ -218,7 +221,7 @@ public class AccomodationDAOImpl implements AccomodationDAO {
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    return mapResultSetToAccomodtion(rs);
+                    return mapResultSetToAccomodation(rs);
                 } else {
                     throw new AccomodationNotFoundException("Accomodation not found with ID: " + idAccomodation);
                 }
@@ -237,7 +240,7 @@ public class AccomodationDAOImpl implements AccomodationDAO {
     }
 
     //=========UTILITY=============//
-    private AccomodationResponseDTO mapResultSetToAccomodtion(ResultSet rs) throws SQLException {
+    private AccomodationResponseDTO mapResultSetToAccomodation(ResultSet rs) throws SQLException {
         AccomodationResponseDTO accomodation = new AccomodationResponseDTO();
         accomodation.setIdAccomodation(rs.getInt("id_accomodation"));
         accomodation.setAccomodationName(rs.getString("accomodation_name"));
@@ -245,7 +248,7 @@ public class AccomodationDAOImpl implements AccomodationDAO {
         accomodation.setAccomodationAddress(rs.getString("accomodation_address"));
         HostDAOImpl hostDAO = new HostDAOImpl();
         //lambda expression, funzione senza parametri che torna un oggetto
-        accomodation.setHost(hostDAO.findById(rs.getInt("id_host")).orElseThrow(() -> new HostNotFoundException("Host not found")));
+        accomodation.setHostId(rs.getInt("id_host"));
         accomodation.setNBedPlaces(rs.getInt("n_bed_places"));
         accomodation.setFloor(rs.getInt("floor"));
         accomodation.setStartDate(DateConverter.date2LocalDate(rs.getDate("starter_date")));

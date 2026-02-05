@@ -30,22 +30,23 @@ public class AccomodationController {
 
     //====================CREATE==========================//
     public void createAccomodation(Context ctx) {
-        log.info("POST /api/v1/accomodations - Request to create an accomodation");
+        log.info("POST /api/v1/accomodations");
 
-        // legge l'http request(JSON) e lo converte in un AccomodationRequest java
-        AccomodationRequestDTO accomodation = ctx.bodyAsClass(AccomodationRequestDTO.class);
+        AccomodationRequestDTO accomodationRequest = ctx.bodyAsClass(AccomodationRequestDTO.class);
 
-        //
         try {
-            accomodationService.insertAccomodation(accomodation);
+            AccomodationResponseDTO createdAccomodation = accomodationService.insertAccomodation(accomodationRequest);
 
-            log.info("Accomodation successfully created - name: {}", accomodation.getAccomodationName());
+            log.info("Accomodation successfully created - ID: {}, name: {}",
+                    createdAccomodation.getIdAccomodation(),
+                    createdAccomodation.getAccomodationName());
+
             ctx.status(HttpStatus.CREATED);
-            ctx.json(accomodation);
+            ctx.json(createdAccomodation); 
 
         } catch (Exception ex) {
             log.warn("Creazione fallita - {}", ex.getMessage());
-            ctx.status(HttpStatus.CONFLICT); 
+            ctx.status(HttpStatus.CONFLICT);
             ctx.json(ex.getMessage());
         }
     }
@@ -86,9 +87,5 @@ public class AccomodationController {
         ctx.json(updated);
     }
 
-
     // UTILITY
-
-   
-
 }

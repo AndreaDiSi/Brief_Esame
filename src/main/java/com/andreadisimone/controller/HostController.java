@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.andreadisimone.dtos.host_dtos.HostRequestDTO;
 import com.andreadisimone.dtos.host_dtos.HostResponseDTO;
+import com.andreadisimone.dtos.tenant_dtos.TenantResponseDTO;
 import com.andreadisimone.service.HostService;
 
 import io.javalin.http.Context;
@@ -26,7 +27,7 @@ public class HostController {
         app.delete("/api/v1/hosts/{id}", this::deleteHost);
         app.get("/api/v1/hosts/best", this::getBestHost);
         app.get("/api/v1/hosts/superhosts",this::getAllSuperHosts);
-        app.get("/api/v1/hosts/topfivehosts", this::getTopFiveBestHost);
+        
     }
 
     public void getAllHosts(Context ctx) {
@@ -48,11 +49,7 @@ public class HostController {
         ctx.json(bestHost);
     }
 
-    public void getTopFiveBestHost(Context ctx) {
-        List<HostResponseDTO> bestHosts = hostService.getTopFiveBestHost();
-        ctx.status(HttpStatus.OK);
-        ctx.json(bestHosts);
-    }
+    
 
     public void getAllSuperHosts(Context ctx) {
         List<HostResponseDTO> superHosts = hostService.getAllSuperHosts();

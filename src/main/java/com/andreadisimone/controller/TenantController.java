@@ -27,6 +27,7 @@ public class TenantController {
         app.put("/api/v1/tenants/{id}", this::updateTenant);
         app.delete("/api/v1/tenants/{id}", this::deleteTenant);
         app.get("/api/v1/tenants/{id}/last-reservation", this::getLastReservation);
+        app.get("/api/v1/tenants/topfivetenants", this::getTopFiveTenants);
     }
 
     public void getAllTenants(Context ctx) {
@@ -41,7 +42,7 @@ public class TenantController {
         TenantRequestDTO request = ctx.bodyAsClass(TenantRequestDTO.class);
         TenantResponseDTO created = tenantService.insertTenant(request);
         ctx.status(HttpStatus.CREATED);
-        ctx.json(created); // È buona norma restituire l'oggetto creato
+        ctx.json(created); 
     }
 
     public void getLastReservation(Context ctx) {
@@ -60,6 +61,14 @@ public class TenantController {
             log.error("Error fetching last reservation for tenant {}: {}", id, e.getMessage());
             ctx.status(HttpStatus.INTERNAL_SERVER_ERROR).result("Internal server error");
         }
+    }
+
+    public void getTopFiveTenants(Context ctx) {
+        List<TenantResponseDTO> topTenants = tenantService.getTopFiveTenants();
+        log.info("Returning {} top tenants", topTenants.size());
+        ctx.status(HttpStatus.CREATED);
+        ctx.json(topTenants); // È buona norma restituire l'oggetto creato
+        
     }
 
     public void updateTenant(Context ctx) {

@@ -58,10 +58,7 @@ public class HostService {
         return hostDAO.getAllSuperHosts();
     }
 
-    public List<HostResponseDTO> getTopFiveBestHost(){
-        log.info("Trying to get all superhosts");
-        return hostDAO.getTopFiveBestHost();
-    }
+    
 
     public boolean deleteById(Integer idhost) {
         log.info("Trying to delete host with id: {}", idhost);

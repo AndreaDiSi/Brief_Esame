@@ -3,28 +3,33 @@ package com.andreadisimone.repository.host_daos;
 import java.util.List;
 import java.util.Optional;
 
-import com.andreadisimone.model.Host;
+import com.andreadisimone.dtos.host_dtos.HostRequestDTO;
+import com.andreadisimone.dtos.host_dtos.HostResponseDTO;
 
 public interface HostDAO {
     
 
     // ==================== CREATE ====================
 
-    Host create(Host Host);
-
+    HostResponseDTO create(HostRequestDTO request);
+    
     // ==================== READ ====================
 
-    List<Host> findAllHosts(Host idHost);
+    List<HostResponseDTO> findAll();
 
-    Optional<Host> findById(Integer idHost);
+    Optional<HostResponseDTO> findById(Integer idHost);
 
+    HostResponseDTO getBestHost();
+
+    List<HostResponseDTO> getTopFiveBestHost();
+
+    List<HostResponseDTO> getAllSuperHosts();
     // ==================== UPDATE ====================
 
-    Optional<Host> update(Host Host);
+    HostResponseDTO update(Integer id, HostResponseDTO request);
 
     // ==================== DELETE ====================
 
-    int deleteAllHosts();
 
     boolean deleteById(Integer idHost);
 

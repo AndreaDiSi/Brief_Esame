@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import com.andreadisimone.dtos.accomodation_dtos.AccomodationRequestDTO;
 import com.andreadisimone.dtos.accomodation_dtos.AccomodationResponseDTO;
-import com.andreadisimone.model.Accomodation;
 import com.andreadisimone.model.Host;
 
 public interface AccomodationDAO {
@@ -16,11 +15,13 @@ public interface AccomodationDAO {
     AccomodationResponseDTO create(AccomodationRequestDTO accomodation);
 
     // ==================== READ ====================
-    List<Accomodation> findAll();
+    List<AccomodationResponseDTO> getAll();
 
-    List<Accomodation> findAllHostAccomodations(Host idHost);
+    List<AccomodationResponseDTO> getAllHostAccomodations(Host idHost);
 
-    Optional<Accomodation> findById(Integer idAccomodation);
+    Optional<AccomodationResponseDTO> getById(Integer idAccomodation);
+
+    AccomodationResponseDTO getBestAccomodation();
 
     // ==================== UPDATE ====================
 

@@ -4,7 +4,6 @@ import java.util.List;
 import com.andreadisimone.dtos.accomodation_dtos.AccomodationRequestDTO;
 import com.andreadisimone.dtos.accomodation_dtos.AccomodationResponseDTO;
 import com.andreadisimone.exceptions.not_found.HostNotFoundException;
-import com.andreadisimone.model.Accomodation;
 import com.andreadisimone.repository.accomodation_daos.AccomodationDAO;
 import com.andreadisimone.repository.accomodation_daos.AccomodationDAOImpl;
 import com.andreadisimone.repository.host_daos.HostDAO;
@@ -35,7 +34,6 @@ public class AccomodationService {
 
             AccomodationRequestDTO accomodation2save = new AccomodationRequestDTO(accomodation.getAccomodationName(), accomodation.getNRooms(), accomodation.getAccomodationAddress(), accomodation.getNBedPlaces(), accomodation.getFloor(), accomodation.getPrice(), accomodation.getEndDate(), accomodation.getStartDate(), accomodation.getHostId());
             
-            //manda request e riceve response
             return accomodationDao.create(accomodation2save);
             
         } catch (HostNotFoundException e) {
@@ -44,10 +42,16 @@ public class AccomodationService {
         }
     }
 
-    public List<Accomodation> getAllAccomodation(){
+    public List<AccomodationResponseDTO> getAllAccomodation(){
         log.info("Trying to get all Accomodations");
 
-        return accomodationDao.findAll();
+        return accomodationDao.getAll();
+    };
+
+    public AccomodationResponseDTO getBestAccomodation(){
+        log.info("Trying to get the best Accomodation");
+
+        return accomodationDao.getBestAccomodation();
     };
 
     public boolean deleteById(Integer idAccomodation){

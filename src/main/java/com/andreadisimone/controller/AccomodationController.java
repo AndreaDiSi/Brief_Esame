@@ -1,12 +1,9 @@
 package com.andreadisimone.controller;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.andreadisimone.dtos.accomodation_dtos.AccomodationRequestDTO;
 import com.andreadisimone.dtos.accomodation_dtos.AccomodationResponseDTO;
-import com.andreadisimone.model.Accomodation;
 import com.andreadisimone.service.AccomodationService;
 
 import io.javalin.Javalin;
@@ -28,6 +25,7 @@ public class AccomodationController {
         app.get("/api/v1/accomodations", this::getAllAccomodations);
         app.delete("/api/v1/accomodations/{idAccomodation}", this::deleteAccomodation);
         app.put("/api/v1/accomodations/{idAccomodation}", this::updateAccomodation);
+        app.get("/api/v1/bestAccomodations", this::getBestAccomodation);
     }
 
     //====================CREATE==========================//
@@ -47,17 +45,24 @@ public class AccomodationController {
 
         } catch (Exception ex) {
             log.warn("Creazione fallita - {}", ex.getMessage());
-            ctx.status(HttpStatus.CONFLICT); // 409
-            ctx.json(buildErrorResponse(ex.getMessage()));
+            ctx.status(HttpStatus.CONFLICT); 
+            ctx.json(ex.getMessage());
         }
     }
 
     //====================READ==========================//
     public void getAllAccomodations(Context ctx) {
         log.info("GET /api/v1/accomodations - Request to show all accomodations");
-        List<Accomodation> accomodationList = accomodationService.getAllAccomodation();
+        List<AccomodationResponseDTO> accomodationList = accomodationService.getAllAccomodation();
         ctx.status(HttpStatus.OK);
         ctx.json(accomodationList);
+    }
+
+    public void getBestAccomodation(Context ctx) {
+        log.info("GET /api/v1/bestAccomodations - Request to show best accomodation");
+        AccomodationResponseDTO bestAccomodation = accomodationService.getBestAccomodation();
+        ctx.status(HttpStatus.OK);
+        ctx.json(bestAccomodation);
     }
 
     //====================DELETE==========================//
@@ -80,18 +85,10 @@ public class AccomodationController {
         AccomodationResponseDTO updated = accomodationService.update(id, accomodation);
         ctx.json(updated);
     }
+
+
     // UTILITY
 
-    private Map<String, String> buildErrorResponse(String errorMessage) {
-        Map<String, String> error2return = new HashMap<>();
-        error2return.put("error", errorMessage);
-        return error2return;
-    }
-
-    private Map<String, String> buildSuccessResponse(String message) {
-        Map<String, String> success2return = new HashMap<>();
-        success2return.put("message", message);
-        return success2return;
-    }
+   
 
 }

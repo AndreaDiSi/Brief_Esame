@@ -2,7 +2,7 @@ package com.andreadisimone.dtos.accomodation_dtos;
 
 import java.time.LocalDate;
 
-import com.andreadisimone.model.Host;
+import com.andreadisimone.dtos.host_dtos.HostResponseDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,5 +22,6 @@ public class AccomodationResponseDTO {
     private LocalDate endDate;
     private LocalDate startDate;
     private int hostId;
-    private Host host;
+    private HostResponseDTO host;
+    private Integer nReservations;
 }

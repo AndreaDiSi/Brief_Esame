@@ -3,31 +3,24 @@ package com.andreadisimone.repository.reservation_daos;
 import java.util.List;
 import java.util.Optional;
 
-import com.andreadisimone.model.Reservation;
-import com.andreadisimone.model.Tenant;
+import com.andreadisimone.dtos.reservation_dtos.ReservationRequestDTO;
+import com.andreadisimone.dtos.reservation_dtos.ReservationResponseDTO;
 
 public interface ReservationDAO {
-
+    
     // ==================== CREATE ====================
-
-    Reservation create(Reservation Reservation);
-
+    ReservationResponseDTO create(ReservationRequestDTO request);
+    
     // ==================== READ ====================
-    List<Reservation> findAll();
+    List<ReservationResponseDTO> findAll();
 
-    List<Reservation> findAllTenantReservations(Tenant idTenant);
+    Optional<ReservationResponseDTO> findById(Integer idReservation);
 
-    Optional<Reservation> findById(Integer idReservation);
+    
 
     // ==================== UPDATE ====================
-
-    Optional<Reservation> update(Reservation Reservation);
+    ReservationResponseDTO update(Integer id, ReservationRequestDTO request);
 
     // ==================== DELETE ====================
-
-    int deleteAllTenantReservations(Tenant idTenant);
-    
     boolean deleteById(Integer idReservation);
-
-    
 }

@@ -3,34 +3,21 @@ package com.andreadisimone.repository.feedback_daos;
 import java.util.List;
 import java.util.Optional;
 
-import com.andreadisimone.model.Accomodation;
-import com.andreadisimone.model.Feedback;
-import com.andreadisimone.model.Tenant;
+import com.andreadisimone.dtos.feedback_dtos.FeedbackRequestDTO;
+import com.andreadisimone.dtos.feedback_dtos.FeedbackResponseDTO;
 
 public interface FeedbackDAO {
-
+    
     // ==================== CREATE ====================
-
-    Feedback create(Feedback Feedback);
-
+    FeedbackResponseDTO create(FeedbackRequestDTO request);
+    
     // ==================== READ ====================
-    List<Feedback> findAll();
-
-    List<Feedback> findAllTenantFeedbacks(Tenant idTenant);
-
-    Optional<Feedback> findById(Integer idFeedback);
-
-    List<Feedback> findAllAccomodationFeedbacks(Accomodation idAccomodation);
+    List<FeedbackResponseDTO> findAll();
+    Optional<FeedbackResponseDTO> findById(Integer idFeed);
 
     // ==================== UPDATE ====================
-
-    Optional<Feedback> update(Feedback feedback);
+    FeedbackResponseDTO update(Integer id, FeedbackRequestDTO request);
 
     // ==================== DELETE ====================
-
-    int deleteAllTenantFeedbacks(Tenant idTenant);
-    
-    boolean deleteById(Integer idFeedback);
-
-    
+    boolean deleteById(Integer idFeed);
 }

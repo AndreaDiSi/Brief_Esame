@@ -1,6 +1,10 @@
 package com.andreadisimone;
 
 import com.andreadisimone.controller.AccomodationController;
+import com.andreadisimone.controller.FeedbackController;
+import com.andreadisimone.controller.HostController;
+import com.andreadisimone.controller.ReservationController;
+import com.andreadisimone.controller.TenantController;
 import com.andreadisimone.util.DatabaseConnection;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -37,8 +41,16 @@ public class App
 
         app.options("/*", ctx -> ctx.status(204));
 
+        HostController hostController = new HostController();
         AccomodationController accomodationController = new AccomodationController();
+        TenantController tenantController = new TenantController();
+        ReservationController reservationController = new ReservationController();
+        FeedbackController feedbackController = new FeedbackController();
         accomodationController.registerRoutes(app);
+        hostController.registerRoutes(app);
+        tenantController.registerRoutes(app);
+        reservationController.registerRoutes(app);
+        feedbackController.registerRoutes(app);
 
         app.start(8080); //app è metodo di Javalin
 
